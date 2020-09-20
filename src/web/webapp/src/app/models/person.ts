@@ -1,3 +1,3 @@
 export class Person {
-    constructor(public name_ar,public name_en,public email,public ipPhone,public jobTitle,public image){}
+    constructor(public name_ar:string,public name_en:string,public email:string,public ipPhone,public jobTitle,public image){}
 }

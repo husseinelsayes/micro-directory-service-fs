@@ -16,7 +16,6 @@ import { InterceptorService } from './services/interceptor.service';
 import { SpinnerComponent } from './components/shared/spinner/spinner.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { SidebarComponent } from './components/shared/sidebar/sidebar.component';
-import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import { QuillModule } from 'ngx-quill';
@@ -41,7 +40,6 @@ import { SharedDirectivesModule } from './directives/shared-directives.module';
     //
     NgxEchartsModule,
     NgxDatatableModule,
-    NgbModule,
     QuillModule,
     //
     BrowserModule,

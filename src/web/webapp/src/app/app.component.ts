@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { OAuthService} from 'angular-oauth2-oidc';
 import { authConfig } from './services/sso.config';
@@ -16,6 +16,8 @@ export class AppComponent implements OnInit , OnChanges{
   set state(state: string) {
     //console.debug('client received state', state);
   }
+
+  @Output() message = new EventEmitter<any>();
   
   constructor(private router: Router,private _oauthService : OAuthService,public navService: NavigationService) {
     //this.configureSSo();

@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<div class="row text-right">
+<div *ngIf="filteredPersons" class="row text-right">
     <div *ngFor="let person of filteredPersons" class="col-md-3">
         <div class="container-fluid">
             <div class="row">

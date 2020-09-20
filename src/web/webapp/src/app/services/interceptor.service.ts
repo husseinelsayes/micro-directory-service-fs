@@ -13,6 +13,7 @@ import { LoaderService } from '../services/loader.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class InterceptorService implements HttpInterceptor{
 
   constructor(private loaderService: LoaderService) { }
