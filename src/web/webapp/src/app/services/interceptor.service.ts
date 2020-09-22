@@ -1,14 +1,9 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpResponse,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor
-} from '@angular/common/http';
+import {HttpResponse,HttpRequest,HttpHandler,HttpEvent,HttpInterceptor,HttpErrorResponse} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LoaderService } from '../services/loader.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,29 +11,28 @@ import { LoaderService } from '../services/loader.service';
 
 export class InterceptorService implements HttpInterceptor{
 
-  constructor(private loaderService: LoaderService) { }
+  constructor(private _notificationService : NotificationService) { }
   
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.showLoader();
-    return next.handle(req).pipe(tap((event: HttpEvent<any>) => { 
-      if (event instanceof HttpResponse) {
-        this.onEnd();
+    this._notificationService.loading();
+    return next.handle(req).pipe(tap((httpResponse: HttpEvent<any>) => { 
+      if (httpResponse instanceof HttpResponse) {
+        if(req.method == 'POST' || req.method == 'PUT' || req.method == 'DELETE'){
+          this._notificationService.success(httpResponse.body.payload);
+        }else{
+          this._notificationService.ready();
+        }
       }
     },
       (err: any) => {
-        this.onEnd();
+        if (err instanceof HttpErrorResponse) {
+          if(err.error.payload){
+            this._notificationService.error(err.error.payload);
+          }else{
+            this._notificationService.error(['خطأ في تنفيذ الطلب .. يرجى المحاولة لاحقاً']);
+          }
+          
+        }
     }));
   }  
-  
-  private onEnd(): void {
-    this.hideLoader();
-  }
-  
-  private showLoader(): void {
-    this.loaderService.show();
-  }
-  
-  private hideLoader(): void {
-    this.loaderService.hide();
-  }
 }

@@ -21,6 +21,7 @@ import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import { QuillModule } from 'ngx-quill';
 import { FindContactComponent } from './pages/find-contact/find-contact.component';
 import { SharedDirectivesModule } from './directives/shared-directives.module';
+import { NotificationService } from './services/notification.service';
 
 
 
@@ -60,6 +61,7 @@ import { SharedDirectivesModule } from './directives/shared-directives.module';
   providers: [
     OAuthService,
     AuthGuard,
+    NotificationService,
     {
     provide: HTTP_INTERCEPTORS,
     useClass: InterceptorService,

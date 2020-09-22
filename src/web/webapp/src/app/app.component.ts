@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ResolveStart, RouteConfigLoadStart, ResolveEnd, RouteConfigLoadEnd } from '@angular/router';
 import { OAuthService} from 'angular-oauth2-oidc';
 import { authConfig } from './services/sso.config';
 import { JwksValidationHandler } from 'angular-oauth2-oidc-jwks';
 import { NavigationService } from './services/navigation.service';
+import { NotificationService } from './services/notification.service';
 
 
 @Component({
@@ -12,27 +13,29 @@ import { NavigationService } from './services/navigation.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit , OnChanges{
-  @Input('state')
-  set state(state: string) {
-    //console.debug('client received state', state);
-  }
-
+  @Input('state') state: string;
   @Output() message = new EventEmitter<any>();
   
-  constructor(private router: Router,private _oauthService : OAuthService,public navService: NavigationService) {
+  constructor(private router: Router,private _oauthService : OAuthService,public navService: NavigationService,private _notificationService : NotificationService) {
     //this.configureSSo();
   }
 
-
   ngOnChanges(changes: SimpleChanges) {
-    //console.log('current state value ',changes.state.currentValue);
     this.navService.sidebarState.sidenavOpen = JSON.parse(changes.state.currentValue).sidenavOpen;
     this.navService.sidebarState.childnavOpen = JSON.parse(changes.state.currentValue).childnavOpen;
   }
   
   ngOnInit() {
     this.router.initialNavigation();
-    //this.toggelSidebar();
+    this._notificationService.appNotification$.subscribe(notification => {
+      setTimeout(()=>this.message.emit(notification),0);
+    })
+    if (event instanceof RouteConfigLoadStart || event instanceof ResolveStart) {
+      this._notificationService.loading();
+    }
+    if (event instanceof RouteConfigLoadEnd || event instanceof ResolveEnd) {
+      this._notificationService.ready();
+    }
   }
 
   configureSSo(){
